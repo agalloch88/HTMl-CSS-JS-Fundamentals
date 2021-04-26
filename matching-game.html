@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Smiley Matching Game</title>
+        <style>
+ 
+            body {
+                background-color: darkgrey;
+                border-style: solid;
+                border-width: 25px;
+                margin: 50px;
+            }
+
+            h1 {
+                text-align: center;
+                font-style: italic;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                color: blue
+            }
+
+            p {
+                font-style: italic;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                color: blue;
+                text-align: center;
+            }
+            
+            img {
+                position: absolute;
+            }
+
+            div {
+                position: absolute;
+                width: 500px;
+                height: 500px;
+                
+            }
+
+            #rightSide {
+                left: 900px;
+                border-left: 1px solid;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Matching Game</h1>
+            <p>Click on the extra smiley face on the left to advance to the next round.</p>
+            <p>You only get one try, so be careful with your clicks!</p>
+                <div id="leftSide"></div>
+                <div id="rightSide"></div>
+        <script>
+            let numberOfFaces = 5
+            let numberOfTries = 0
+            const theLeftSide = document.getElementById('leftSide')
+            const theRightSide = document.getElementById('rightSide')
+            window.addEventListener('load', generateFaces)
+
+            function generateFaces() {
+                for (i = 0; i < numberOfFaces; i++) {
+                    let face = document.createElement('img')
+                    face.src = 'images/smile.png'
+                    let randomTop = Math.floor(Math.random() * 400) + 1;
+                    let randomLeft = Math.floor(Math.random() * 400) + 1;
+                    face.style.top = randomTop + 'px';
+                    face.style.left = randomLeft + 'px';
+                    leftSide.appendChild(face);
+                }
+                
+                const leftSideImages = theLeftSide.cloneNode(true);
+                leftSideImages.removeChild(leftSideImages.lastChild);
+                theRightSide.appendChild(leftSideImages);
+
+                theLeftSide.lastChild.addEventListener('click', nextLevel);
+                document.body.addEventListener('click', gameOver);
+            }
+
+            function nextLevel() {
+                event.stopPropagation();
+                numberOfFaces += 5;
+                numberOfTries += 1;
+                while (theLeftSide.lastChild) {
+                   theLeftSide.removeChild(theLeftSide.lastChild)
+                }
+
+                while (theRightSide.lastChild) {
+                    theRightSide.removeChild(theRightSide.lastChild)
+                }
+               // let leftCopy = theLeftSide.cloneNode();
+                //theLeftSide.remove();
+                //let rightCopy = theRightSide.cloneNode();
+                //theRightSide.remove();
+                //document.querySelector('body').appendChild(leftCopy);
+                //document.querySelector('body').appendChild(rightCopy);                
+                generateFaces();
+                alert('Congrats! That is attempt #' + numberOfTries + '!');
+
+                
+            }
+
+            function gameOver() {
+                alert('Game over!')
+                document.body.removeEventListener('click', gameOver);
+                theLeftSide.lastChild.removeEventListener('click', nextLevel);
+                //let button = document.createElement('button')
+            }
+        </script>
+    </body>
+</html>
